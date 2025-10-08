@@ -52,21 +52,65 @@ CREATE TABLE program_modules (
     FOREIGN KEY (module_id) REFERENCES modules(id)
 )
 
-CREATE TABLE TeachingGroups (
+CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     slug varchar(255),
     created_at timestamp,
     updated_at timestamp
-)
+);
 
-CREATE TABLE Users (
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+
+CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    teaching_group_id BIGINT REFERENCES TeachingGroups(id),
+    teaching_group_id BIGINT REFERENCES teaching_groups(id),
     name varchar(255),
     email varchar(255),
     password_hash CHAR(64) NOT NULL,
     linkEdGroup varchar(255),
-    role VARCHAR(20) CHECK (role IN ('student', 'teacher', 'admin')),
+    role user_role,
     created_at timestamp,
     updated_at timestamp
 );
+
+CREATE TYPE status_default_list AS ENUM ('active', 'pending', 'cancelled', 'completed');
+
+CREATE TABLE enrollments (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_user BIGINT REFERENCES users(id),
+    id_program BIGINT REFERENCES programs(id),
+    status status_default_list,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TABLE payments (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_enrollment BIGINT REFERENCES enrollments(id),
+    amount INT,
+    status status_default_list,
+    date TIMESTAMP,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TABLE program_completions (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_user BIGINT REFERENCES users(id),
+    id_program BIGINT REFERENCES programs(id),
+    status status_default_list,
+    begin_date TIMESTAMP,
+    end_date TIMESTAMP,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TABLE certificates (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_user BIGINT REFERENCES users(id),
+    id_program BIGINT REFERENCES programs(id),
+    url varchar(255),
+    release_date TIMESTAMP,
+    created_at timestamp,
+    updated_at timestamp
+)
