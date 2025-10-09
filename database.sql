@@ -76,6 +76,8 @@ CREATE TABLE users (
 
 CREATE TYPE status_default_list AS ENUM ('active', 'pending', 'cancelled', 'completed');
 
+CREATE TYPE status_payments_default_list AS ENUM ('pending', 'paid', 'failed', 'refunded');
+
 CREATE TABLE enrollments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id),
@@ -89,7 +91,7 @@ CREATE TABLE payments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     enrollment_id BIGINT REFERENCES enrollments(id),
     amount INT,
-    status status_default_list,
+    status status_payments_default_list,
     paid_at TIMESTAMP,
     created_at timestamp,
     updated_at timestamp
