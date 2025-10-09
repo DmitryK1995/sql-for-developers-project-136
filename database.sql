@@ -50,7 +50,7 @@ CREATE TABLE program_modules (
     PRIMARY KEY (module_id, program_id),
     FOREIGN KEY (program_id) REFERENCES programs(id),
     FOREIGN KEY (module_id) REFERENCES modules(id)
-)
+);
 
 CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
