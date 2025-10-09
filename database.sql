@@ -34,7 +34,7 @@ CREATE TABLE lessons (
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp,
-    course_id BIGINT REFERENCES Courses (id),
+    course_id BIGINT REFERENCES Courses (id)
 );
 
 CREATE TABLE module_courses (
