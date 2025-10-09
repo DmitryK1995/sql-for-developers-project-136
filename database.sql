@@ -1,8 +1,8 @@
 CREATE TABLE programs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name varchar(255),
-    cost INT,
-    typeName varchar(255),
+    price INT,
+    program_type varchar(255),
     created_at timestamp,
     updated_at timestamp
 );
@@ -12,6 +12,7 @@ CREATE TABLE modules (
     name varchar(255),
     description text,
     created_at timestamp,
+    deleted_at timestamp,
     updated_at timestamp
 );
 
@@ -20,6 +21,7 @@ CREATE TABLE courses (
     name varchar(255),
     description text,
     created_at timestamp,
+    deleted_at timestamp,
     updated_at timestamp
 );
 
@@ -27,13 +29,12 @@ CREATE TABLE lessons (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name varchar(255),
     content text,
-    linkVideo varchar(255),
-    coursePosition int,
+    video_url varchar(255),
+    position int,
     created_at timestamp,
     updated_at timestamp,
-    linkCourse varchar(255),
+    deleted_at timestamp,
     course_id BIGINT REFERENCES Courses (id),
-    is_deleted boolean
 );
 
 CREATE TABLE module_courses (
@@ -67,7 +68,7 @@ CREATE TABLE users (
     name varchar(255),
     email varchar(255),
     password_hash CHAR(64) NOT NULL,
-    linkEdGroup varchar(255),
+    deleted_at timestamp,
     role user_role,
     created_at timestamp,
     updated_at timestamp
@@ -77,8 +78,8 @@ CREATE TYPE status_default_list AS ENUM ('active', 'pending', 'cancelled', 'comp
 
 CREATE TABLE enrollments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_user BIGINT REFERENCES users(id),
-    id_program BIGINT REFERENCES programs(id),
+    user_id BIGINT REFERENCES users(id),
+    program_id BIGINT REFERENCES programs(id),
     status status_default_list,
     created_at timestamp,
     updated_at timestamp
@@ -86,38 +87,38 @@ CREATE TABLE enrollments (
 
 CREATE TABLE payments (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_enrollment BIGINT REFERENCES enrollments(id),
+    enrollment_id BIGINT REFERENCES enrollments(id),
     amount INT,
     status status_default_list,
-    date TIMESTAMP,
+    paid_at TIMESTAMP,
     created_at timestamp,
     updated_at timestamp
 );
 
 CREATE TABLE program_completions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_user BIGINT REFERENCES users(id),
-    id_program BIGINT REFERENCES programs(id),
+    user_id BIGINT REFERENCES users(id),
+    program_id BIGINT REFERENCES programs(id),
     status status_default_list,
-    begin_date TIMESTAMP,
-    end_date TIMESTAMP,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
     created_at timestamp,
     updated_at timestamp
 );
 
 CREATE TABLE certificates (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_user BIGINT REFERENCES users(id),
-    id_program BIGINT REFERENCES programs(id),
+    user_id BIGINT REFERENCES users(id),
+    program_id BIGINT REFERENCES programs(id),
     url varchar(255),
-    release_date TIMESTAMP,
+    issued_at TIMESTAMP,
     created_at timestamp,
     updated_at timestamp
 );
 
 CREATE TABLE quizzes (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_lesson BIGINT REFERENCES lessons(id),
+    lesson_id BIGINT REFERENCES lessons(id),
     name varchar(255),
     content JSON,
     created_at timestamp,
@@ -135,8 +136,9 @@ CREATE TABLE exercise (
 
 CREATE TABLE discussions (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_lesson BIGINT REFERENCES lessons(id),
-    content JSON,
+    user_id BIGINT REFERENCES users(id),
+    lesson_id BIGINT REFERENCES lessons(id),
+    text JSON,
     created_at timestamp,
     updated_at timestamp
 );
@@ -145,7 +147,8 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 
 CREATE TABLE blog (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_user BIGINT REFERENCES users(id),
+    user_id BIGINT REFERENCES users(id),
+    name varchar(255),
     content text,
     status blog_status,
     created_at timestamp,
