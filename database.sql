@@ -113,4 +113,22 @@ CREATE TABLE certificates (
     release_date TIMESTAMP,
     created_at timestamp,
     updated_at timestamp
+);
+
+CREATE TABLE quizzes (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_lesson BIGINT REFERENCES lessons(id),
+    name varchar(255),
+    content JSON,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TABLE exercise (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_lesson BIGINT REFERENCES lessons(id),
+    name varchar(255),
+    url varchar(255),
+    created_at timestamp,
+    updated_at timestamp
 )
