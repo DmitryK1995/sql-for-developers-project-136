@@ -67,7 +67,7 @@ CREATE TABLE users (
     teaching_group_id BIGINT REFERENCES teaching_groups(id),
     name varchar(255),
     email varchar(255),
-    password_hash CHAR(64) NOT NULL,
+    password_hash CHAR(64),
     deleted_at timestamp,
     role user_role,
     created_at timestamp,
