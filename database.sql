@@ -131,4 +131,23 @@ CREATE TABLE exercise (
     url varchar(255),
     created_at timestamp,
     updated_at timestamp
-)
+);
+
+CREATE TABLE discussions (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_lesson BIGINT REFERENCES lessons(id),
+    content JSON,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
+
+CREATE TABLE blog (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_user BIGINT REFERENCES users(id),
+    content text,
+    status blog_status,
+    created_at timestamp,
+    updated_at timestamp
+);
