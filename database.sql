@@ -55,12 +55,12 @@ CREATE TABLE program_modules (
 
 CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    slug VARCHAR(255),
+    slug VARCHAR(255) NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
