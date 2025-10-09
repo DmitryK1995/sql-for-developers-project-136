@@ -64,7 +64,6 @@ CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    teaching_group_id BIGINT REFERENCES teaching_groups(id) ON DELETE SET NULL,
     name varchar(255),
     email varchar(255),
     password_hash CHAR(64),
@@ -72,6 +71,14 @@ CREATE TABLE users (
     role user_role,
     created_at timestamp,
     updated_at timestamp
+);
+
+CREATE TABLE users_teaching_group (
+    user_id INT NOT NULL,
+    teaching_group_id INT NOT NULL,
+    PRIMARY KEY (user_id, teaching_group_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (teaching_group_id) REFERENCES teaching_groups(id)
 );
 
 CREATE TYPE status_default_list AS ENUM ('active', 'pending', 'cancelled', 'completed');
