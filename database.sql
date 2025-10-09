@@ -64,7 +64,7 @@ CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    teaching_group_id BIGINT REFERENCES teaching_groups(id), 
+    teaching_group_id BIGINT REFERENCES teaching_groups(id) ON DELETE CASCADE, 
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     password_hash CHAR(64),
