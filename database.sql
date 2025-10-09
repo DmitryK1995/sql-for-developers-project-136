@@ -37,7 +37,7 @@ CREATE TABLE lessons (
     course_id BIGINT REFERENCES Courses (id)
 );
 
-CREATE TABLE module_courses (
+CREATE TABLE course_modules (
     module_id INT NOT NULL,
     course_id INT NOT NULL,
     PRIMARY KEY (module_id, course_id),
@@ -125,9 +125,9 @@ CREATE TABLE quizzes (
     updated_at timestamp
 );
 
-CREATE TABLE exercise (
+CREATE TABLE exercises (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    id_lesson BIGINT REFERENCES lessons(id),
+    lesson_id BIGINT REFERENCES lessons(id),
     name varchar(255),
     url varchar(255),
     created_at timestamp,
@@ -145,7 +145,7 @@ CREATE TABLE discussions (
 
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
 
-CREATE TABLE blog (
+CREATE TABLE blogs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id),
     name varchar(255),
