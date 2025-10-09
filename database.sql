@@ -55,30 +55,23 @@ CREATE TABLE program_modules (
 
 CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    slug varchar(255),
-    created_at timestamp,
-    updated_at timestamp
+    slug VARCHAR(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name varchar(255),
-    email varchar(255),
+    teaching_group_id BIGINT REFERENCES teaching_groups(id), 
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
     password_hash CHAR(64),
-    deleted_at timestamp,
+    deleted_at TIMESTAMP,
     role user_role,
-    created_at timestamp,
-    updated_at timestamp
-);
-
-CREATE TABLE users_teaching_group (
-    user_id INT NOT NULL,
-    teaching_group_id INT NOT NULL,
-    PRIMARY KEY (user_id, teaching_group_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (teaching_group_id) REFERENCES teaching_groups(id)
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TYPE status_default_list AS ENUM ('active', 'pending', 'cancelled', 'completed');
